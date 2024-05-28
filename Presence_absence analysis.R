@@ -5,14 +5,15 @@
 ###########################################################################################################
 
 
-##This analysis uses the filtered Gold Standard (GS) dataset with Yes and No answers from 20 volunteers aggregated (reduce step in panoptes aggregation package) into 1 answer per image and the expert answer.
+##This analysis uses the filtered Gold Standard (GS) dataset with Yes and No answers from 20 volunteers aggregated (reduce step in panoptes aggregation package used to obtain this data) into 1 answer per image and the expert answer.
 
 
 ###1. PRESENCE/ABSENCE: compare yes and no answers using a majority vote or most frequent answer criteria (Swanson et al. 2015).
 #if equal, print Y as we have seen volunteers tend to miss iguanas instead of overcount.
-#expert answers are listed in the column named presence_absence_exp.
+#expert answers were added in the column named presence_absence_exp.
+#example for phase 3
 
-GSall <- read.csv("GS-comparison.csv", sep = ";") #read the dataset
+GSall <- read.csv("3-TO-GS-comparison.csv", sep = ";") #read the dataset
 names(GSall)
 
 GSall$presence_absence_vol <- ifelse(GSall$presence_yes > GSall$presence_no, 'Y', ifelse(GSall$presence_yes < GSall$presence_no, 'N', 'Y')) #print the selected answer for presence/absence in a new column
@@ -32,15 +33,15 @@ data.frame(table(GSall$comparison)) #gets the number of images with correct and 
 (62*100)/1156 #incorrect
 #R: 5
 
-#write new file
-write.csv(GSall, file="GS-results_mv.csv")
+#export your results
+write.csv(GSall, file="3-GS-results_mv.csv")
 
 
 ## --------------------------------------------
 
 
 ##1.1.Same analysis for GS images WITH iguanas present (from the expert view).
-GSY <- read.csv("GS-comparison.csv", sep = ";")
+GSY <- read.csv("3-T0-GS-comparison.csv", sep = ";")
 
 ##Subset images with iguanas.
 GSY <- subset(GSY, presence_absence_exp == "Y")
@@ -57,21 +58,16 @@ GSY$comparison <- ifelse(GSY$presence_absence_exp == GSY$presence_absence_vol, '
 unique(GSY$comparison)
 data.frame(table(GSY$comparison))
 
-#write new file
-write.csv(GSY, file="GS-results_mv_Y.csv")
+#export your results
+write.csv(GSY, file="3-GS-results_mv_Y.csv")
 
-##Calculate percents from results (example).
-(55*100)/116
-#R: 48
-(61*100)/116
-#R:52
 
 
 ## --------------------------------------------
 
 
 ##1.2. Same analysis for GS images WITHOUT iguanas present (from the expert view).
-GSN <- read.csv("GS-comparison.csv", sep = ";")
+GSN <- read.csv("3-TO-GS-comparison.csv", sep = ";")
 
 ##Subset images with no iguanas.
 GSN <- subset(GSN, presence_absence_exp == "N")
@@ -87,14 +83,8 @@ GSN$comparison <- ifelse(GSN$presence_absence_exp == GSN$presence_absence_vol, '
 unique(GSN$comparison)
 data.frame(table(GSN$comparison))
 
-##Calculate percents from results (example).
-(1039*100)/1040
-#R: 99.1
-(1*100)/1040
-#R: 0.1
-
-#write new file
-write.csv(GSN, file="GS-results_mv_N.csv.csv")
+#export your results
+write.csv(GSN, file="3-GS-results_mv_N.csv.csv")
 
 
 ## --------------------------------------------
@@ -103,7 +93,7 @@ write.csv(GSN, file="GS-results_mv_N.csv.csv")
 ###2. PRESENCE/ABSENCE: compare yes and no answers looking for the minimum number of volunteers needed for correct identification and accuracy improvement.
 #This first example accepts as correct for iguana presence when at least 1 volunteer from the 20 selected yes.
 #Repeat the analysis for 2 to 11 volunteers.
-GS1 <- read.csv("GS-comparison.csv", sep = ";")
+GS1 <- read.csv("3-TO-GS-comparison.csv", sep = ";")
 
 GS1$presence_absence_vol <- ifelse(GS1$presence_yes > 0, 'Y', 'N') #print the selected answer for presence/absence in a new column
 unique(GS1$presence_absence_vol)
@@ -132,14 +122,14 @@ axis(1, at =1:11)
 axis(2)
 
 #export your results
-write.csv(GS5, file="GS-results_5th.csv")
+write.csv(GS5, file="3-GS-results_5th.csv")
 
 
 ## --------------------------------------------
 
 
 ##2.1. Same analysis for GS images WITH iguanas present (from the expert view) using the 5 minimum threshold identified.
-GS <- read.csv("GS-comparison.csv", sep = ";")
+GS <- read.csv("3-TO-GS-comparison.csv", sep = ";")
 
 ##Subset images with iguanas.
 GSY5 <- subset(GS, presence_absence_exp == "Y")
@@ -154,12 +144,6 @@ GSY5$comparison <- ifelse(GSY5$presence_absence_exp == GSY5$presence_absence_vol
 unique(GSY5$comparison)
 data.frame(table(GSY5$comparison))
 
-##Calculate percents from results.
-(81*100)/116
-#R: 92.2
-(35*100)/116
-#R: 7.8
-
 #export your results.
 write.csv(GSY5, file="GS-results_5th_Y.csv")
 
@@ -168,7 +152,7 @@ write.csv(GSY5, file="GS-results_5th_Y.csv")
 
 
 ##2.2. Same analysis for GS images WITHOUT iguanas present (from the expert view) using the 5 minimum threshold identified.
-GS <- read.csv("GS-comparison.csv", sep = ";")
+GS <- read.csv("3-TO-GS-comparison.csv", sep = ";")
 
 ##Subset images with no iguanas.
 GSN5 <- subset(GS, presence_absence_exp == "N")
@@ -183,11 +167,6 @@ GSN5$comparison <- ifelse(GSN5$presence_absence_exp == GSN5$presence_absence_vol
 unique(GSN5$comparison)
 data.frame(table(GSN5$comparison))
 
-##Calculate percents from results (example).
-(1034*100)/1040
-#R 99.4
-(6*100)/1040
-#R: 0.6
 
 #export your results.
-write.csv(GSN5, file="GS-results_5th_N.csv")
+write.csv(GSN5, file="3-GS-results_5th_N.csv")
